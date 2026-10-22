@@ -50,6 +50,23 @@ scan, and never repaired by `--fix`.
 Pin this repository by commit wherever it is used - as a submodule, or by checking it out
 at a fixed commit in CI. Update the pin deliberately, and update every pin together.
 
+## Board check
+
+`board_check.py` checks a repository's board and roadmap, for a scheduled CI job:
+
+```
+python board_check.py --repo <owner/name> --root <checkout>
+```
+
+It finds open issues without exactly one state label or without a `block:` label;
+issues closed in the last 35 days without a closing comment, or with a reason label
+that is not in the closure table; and issue numbers or state label names in
+`ROADMAP.md`. If `keys_sweep.py` sits beside it, it runs that too. Each finding names
+the issue or file and fails the run; the output ends with a summary line and a
+verdict line, `PRECOMMIT-VERDICT board PASS|REFUSE`. A board that cannot be read
+exits 2 with no verdict, a fault and never a pass. It needs the `gh` command-line
+tool, authenticated to read the repository's issues.
+
 ## Tests
 
 ```
